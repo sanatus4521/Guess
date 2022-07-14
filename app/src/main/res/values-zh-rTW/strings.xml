@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">猜數字</string>
+    <string name="bigger">大一點</string>
+    <string name="lower">小一點</string>
+    <string name="yes_secret_number_is">沒錯! 秘密數字就是</string>
+    <string name="Dialog_title">提示</string>
+    <string name="enter_a_number">請輸入數字(1~10)</string>
+</resources>

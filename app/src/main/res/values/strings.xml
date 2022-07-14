@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Guess</string>
-    <string name="OK">OK</string>
+    <string name="bigger">bigger</string>
+    <string name="lower">lower</string>
+    <string name="yes_secret_number_is">Yes! The secret number is </string>
+    <string name="Dialog_title">Message</string>
+    <string name="ok">OK</string>
+    <string name="enter_a_number">Please enter a number(1~10) :</string>
 </resources>

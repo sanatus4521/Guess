@@ -28,20 +28,11 @@ class MaterialActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
 
-        val navController = findNavController(R.id.nav_host_fragment_content_material)
-        appBarConfiguration = AppBarConfiguration(navController.graph)
-        setupActionBarWithNavController(navController, appBarConfiguration)
-
         binding.fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
         }
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-    val navController = findNavController(R.id.nav_host_fragment_content_material)
-    return navController.navigateUp(appBarConfiguration)
-            || super.onSupportNavigateUp()
+        counter.setText(secretNumber.count.toString())
     }
 
     fun check(view: View) {
@@ -56,6 +47,7 @@ class MaterialActivity : AppCompatActivity() {
         } else {
             message = getString(R.string.yes_secret_number_is) + secretNumber.secret
         }
+        counter.setText(secretNumber.count.toString())
 //        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
         AlertDialog.Builder(this)
             .setTitle(getString(R.string.Dialog_title))

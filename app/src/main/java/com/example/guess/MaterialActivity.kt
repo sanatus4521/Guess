@@ -1,11 +1,14 @@
 package com.example.guess
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -14,14 +17,25 @@ import com.example.guess.databinding.ActivityMaterialBinding
 import kotlinx.android.synthetic.main.content_material.*
 
 class MaterialActivity : AppCompatActivity() {
-    val secretNumber = SecretNumber()
-    val TAG = MainActivity::class.java.simpleName
+    private lateinit var viewModel: GuessViewModel
+    val TAG = MaterialActivity::class.java.simpleName
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMaterialBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel = ViewModelProvider(this).get(GuessViewModel::class.java)
+        viewModel.counter.observe(this, Observer { data ->
+            counter.setText(data.toString())
+        })
+        viewModel.result.observe(this, Observer { result ->
+            AlertDialog.Builder(this)
+                .setTitle(R.string.Dialog_title)
+                .setMessage(result.toString())
+                .setPositiveButton(R.string.ok, null)
+                .show()
+        })
 
      binding = ActivityMaterialBinding.inflate(layoutInflater)
      setContentView(binding.root)
@@ -29,29 +43,37 @@ class MaterialActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
 
         binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
+            AlertDialog.Builder(this)
+                .setTitle("Replay the game")
+                .setMessage("Are you sure ?")
+                .setPositiveButton("Yes") { dialog, which ->
+                    viewModel.reset()
+                }
+                .setNeutralButton("Cancel", null)
+                .show()
         }
-        counter.setText(secretNumber.count.toString())
+
     }
 
     fun check(view: View) {
-        val n = ed_number.text.toString().toInt()
-        Log.d(TAG, "number: " + n)
-        val validate = secretNumber.validate(n)
-        val message:String
-        if (validate > 0) {
-            message = getString(R.string.bigger)
-        } else if (validate < 0) {
-            message = getString(R.string.lower)
-        } else {
-            message = getString(R.string.yes_secret_number_is) + secretNumber.secret
-        }
-        counter.setText(secretNumber.count.toString())
-//        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
-        AlertDialog.Builder(this)
-            .setTitle(getString(R.string.Dialog_title))
-            .setMessage(message).setPositiveButton(getString(R.string.ok), null)
-            .show()
+        viewModel.guess(ed_number.text.toString().toInt())
+//        val n = ed_number.text.toString().toInt()
+//        Log.d(TAG, "number: " + n)
+//        val validate = secretNumber.validate(n)
+//        val message:String
+//        if (validate > 0) {
+//            message = getString(R.string.bigger)
+//        } else if (validate < 0) {
+//            message = getString(R.string.lower)
+//        } else {
+//            message = getString(R.string.yes_secret_number_is) + secretNumber.secret
+//        }
+//        counter.setText(secretNumber.count.toString())
+//        ed_number.setText("")
+////        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+//        AlertDialog.Builder(this)
+//            .setTitle(getString(R.string.Dialog_title))
+//            .setMessage(message).setPositiveButton(getString(R.string.ok), null)
+//            .show()
     }
 }

@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         } else if (validate < 0) {
             message = getString(R.string.lower)
         } else {
-            message = getString(R.string.yes_secret_number_is) + secretNumber.secret
+            message = getString(R.string.yes_you_got_it) + secretNumber.secret
         }
 //        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
         AlertDialog.Builder(this)

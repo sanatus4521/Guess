@@ -6,4 +6,7 @@
     <string name="yes_secret_number_is">沒錯! 秘密數字就是</string>
     <string name="Dialog_title">提示</string>
     <string name="enter_a_number">請輸入數字(1~10)</string>
+    <string name="yes_you_got_it">沒錯！你猜對了！</string>
+    <string name="ok">OK</string>
+    <string name="ed_number_is_empty">請輸入數字</string>
 </resources>

@@ -2,17 +2,12 @@
     <string name="app_name">Guess</string>
     <string name="bigger">bigger</string>
     <string name="lower">lower</string>
-    <string name="yes_secret_number_is">Yes! The secret number is </string>
+    <string name="ed_number_is_empty">Please enter a number.</string>
+    <string name="yes_you_got_it">Yes! You got it!</string>
     <string name="Dialog_title">Message</string>
     <string name="ok">OK</string>
     <string name="enter_a_number">Please enter a number(1~10) :</string>
     <string name="title_activity_material">MaterialActivity</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 </resources>

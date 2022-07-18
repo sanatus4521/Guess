@@ -4,6 +4,7 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
@@ -29,13 +30,7 @@ class MaterialActivity : AppCompatActivity() {
         viewModel.counter.observe(this, Observer { data ->
             counter.setText(data.toString())
         })
-        viewModel.result.observe(this, Observer { result ->
-            AlertDialog.Builder(this)
-                .setTitle(R.string.Dialog_title)
-                .setMessage(result.toString())
-                .setPositiveButton(R.string.ok, null)
-                .show()
-        })
+
 
      binding = ActivityMaterialBinding.inflate(layoutInflater)
      setContentView(binding.root)
@@ -56,7 +51,23 @@ class MaterialActivity : AppCompatActivity() {
     }
 
     fun check(view: View) {
-        viewModel.guess(ed_number.text.toString().toInt())
+        if (ed_number.text.toString().length == 0) {
+            Toast.makeText(this, R.string.ed_number_is_empty, Toast.LENGTH_LONG).show()
+        } else {
+            viewModel.guess(ed_number.text.toString().toInt())
+        }
+        viewModel.result.observe(this, Observer { result ->
+            val message = when (result) {
+                Result.YES -> R.string.yes_you_got_it
+                Result.BIGGER -> R.string.bigger
+                else -> R.string.lower
+            }
+            AlertDialog.Builder(this)
+                .setTitle(R.string.Dialog_title)
+                .setMessage(message)
+                .setPositiveButton(R.string.ok, null)
+                .show()
+        })
 //        val n = ed_number.text.toString().toInt()
 //        Log.d(TAG, "number: " + n)
 //        val validate = secretNumber.validate(n)

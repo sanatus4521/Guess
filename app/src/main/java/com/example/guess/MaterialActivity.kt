@@ -1,6 +1,7 @@
 package com.example.guess
 
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -31,7 +32,6 @@ class MaterialActivity : AppCompatActivity() {
             counter.setText(data.toString())
         })
 
-
      binding = ActivityMaterialBinding.inflate(layoutInflater)
      setContentView(binding.root)
 
@@ -51,10 +51,11 @@ class MaterialActivity : AppCompatActivity() {
     }
 
     fun check(view: View) {
-        if (ed_number.text.toString().length == 0) {
+        if (ed_number.text.toString().isEmpty()) {
             Toast.makeText(this, R.string.ed_number_is_empty, Toast.LENGTH_LONG).show()
         } else {
             viewModel.guess(ed_number.text.toString().toInt())
+            ed_number.setText("")
         }
         viewModel.result.observe(this, Observer { result ->
             val message = when (result) {
@@ -65,7 +66,14 @@ class MaterialActivity : AppCompatActivity() {
             AlertDialog.Builder(this)
                 .setTitle(R.string.Dialog_title)
                 .setMessage(message)
-                .setPositiveButton(R.string.ok, null)
+                .setPositiveButton(R.string.ok, { dialog, which ->
+                    if (result == Result.YES) {
+                        val intent = Intent(this, RecordActivity::class.java)
+                        intent.putExtra("COUNTER", viewModel.counter.value)
+                        startActivity(intent)
+                    }
+                }
+            )
                 .show()
         })
 //        val n = ed_number.text.toString().toInt()

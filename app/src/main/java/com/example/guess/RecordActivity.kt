@@ -24,6 +24,10 @@ class RecordActivity : AppCompatActivity() {
                 .putInt("REC_COUNT", count)
                 .putString("REC_NICKNAME", nickname)
                 .apply()
+            Thread() {
+                GameDatabase.getInstance(this)?.recordDao()?.
+                add(Record(nickname, count))
+            }.start()
             val intent = Intent()
             intent.putExtra("NICKNAME", nickname)
             setResult(RESULT_OK, intent)

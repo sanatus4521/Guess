@@ -46,14 +46,13 @@ class MaterialActivity : AppCompatActivity() {
         binding.fab.setOnClickListener { view ->
             replay()
         }
-        // Room test
-        val database = Room.databaseBuilder(this,
-        GameDatabase::class.java, "game.db")
-            .build()
-        val recordTest = Record("Billy", 5)
-        Thread() {
-            database.recordDao().add(recordTest)
-        }
+        // Room read
+        Thread () {
+            val recordList = GameDatabase.getInstance(this)?.recordDao()?.getAll()
+            recordList?.forEach {
+                Log.d(TAG, "record: ${it.nickname} ${it.counter}")
+            }
+        }.start()
     }
 
     private fun replay() {

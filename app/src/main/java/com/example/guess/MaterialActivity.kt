@@ -15,10 +15,15 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.room.Database
+import androidx.room.Room
+import com.example.guess.data.GameDatabase
+import com.example.guess.data.Record
 import com.example.guess.databinding.ActivityMaterialBinding
 import kotlinx.android.synthetic.main.content_material.*
 
 class MaterialActivity : AppCompatActivity() {
+    private val REQUEST_RECORD = 100
     private lateinit var viewModel: GuessViewModel
     val TAG = MaterialActivity::class.java.simpleName
 
@@ -31,6 +36,7 @@ class MaterialActivity : AppCompatActivity() {
         viewModel.counter.observe(this, Observer { data ->
             counter.setText(data.toString())
         })
+        Log.d(TAG, "secret number is: ${viewModel.secret}")
 
      binding = ActivityMaterialBinding.inflate(layoutInflater)
      setContentView(binding.root)
@@ -38,16 +44,27 @@ class MaterialActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
 
         binding.fab.setOnClickListener { view ->
-            AlertDialog.Builder(this)
-                .setTitle("Replay the game")
-                .setMessage("Are you sure ?")
-                .setPositiveButton("Yes") { dialog, which ->
-                    viewModel.reset()
-                }
-                .setNeutralButton("Cancel", null)
-                .show()
+            replay()
         }
+        // Room test
+        val database = Room.databaseBuilder(this,
+        GameDatabase::class.java, "game.db")
+            .build()
+        val recordTest = Record("Billy", 5)
+        Thread() {
+            database.recordDao().add(recordTest)
+        }
+    }
 
+    private fun replay() {
+        AlertDialog.Builder(this)
+            .setTitle("Replay the game")
+            .setMessage("Are you sure ?")
+            .setPositiveButton("Yes") { dialog, which ->
+                viewModel.reset()
+            }
+            .setNeutralButton("Cancel", null)
+            .show()
     }
 
     fun check(view: View) {
@@ -70,29 +87,36 @@ class MaterialActivity : AppCompatActivity() {
                     if (result == Result.YES) {
                         val intent = Intent(this, RecordActivity::class.java)
                         intent.putExtra("COUNTER", viewModel.counter.value)
-                        startActivity(intent)
+                        startActivityForResult(intent, REQUEST_RECORD)
                     }
                 }
             )
                 .show()
         })
-//        val n = ed_number.text.toString().toInt()
-//        Log.d(TAG, "number: " + n)
-//        val validate = secretNumber.validate(n)
-//        val message:String
-//        if (validate > 0) {
-//            message = getString(R.string.bigger)
-//        } else if (validate < 0) {
-//            message = getString(R.string.lower)
-//        } else {
-//            message = getString(R.string.yes_secret_number_is) + secretNumber.secret
-//        }
-//        counter.setText(secretNumber.count.toString())
-//        ed_number.setText("")
-////        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
-//        AlertDialog.Builder(this)
-//            .setTitle(getString(R.string.Dialog_title))
-//            .setMessage(message).setPositiveButton(getString(R.string.ok), null)
-//            .show()
+    }
+
+    fun test() {
+        val intent = Intent(this, RecordActivity::class.java)
+        intent.putExtra("AA", "123")
+        intent.putExtra("BB", "456")
+        startActivity(intent)
+
+        Intent(this, RecordActivity::class.java).apply {
+            putExtra("aa", "123")
+            putExtra("bb", "456")
+        }.also {
+            startActivity(it)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_RECORD) {
+            if (resultCode == RESULT_OK) {
+                val nickname = data?.getStringExtra("NICKNAME")
+                Log.d(TAG, "onActivityResult: $nickname")
+                replay()
+            }
+        }
     }
 }

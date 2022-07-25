@@ -1,8 +1,13 @@
 package com.example.guess
 
+import android.app.Activity
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.room.Room
+import com.example.guess.data.GameDatabase
+import com.example.guess.data.Record
 import kotlinx.android.synthetic.main.activity_record2.*
 
 class RecordActivity : AppCompatActivity() {
@@ -19,6 +24,10 @@ class RecordActivity : AppCompatActivity() {
                 .putInt("REC_COUNT", count)
                 .putString("REC_NICKNAME", nickname)
                 .apply()
+            val intent = Intent()
+            intent.putExtra("NICKNAME", nickname)
+            setResult(RESULT_OK, intent)
+            finish()
         }
         val score = getSharedPreferences("guess", MODE_PRIVATE)
             .getInt("REC_COUNT", -1)

@@ -1,13 +1,15 @@
 package com.example.guess
 
+import android.content.Intent
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.guess.data.Record
 import kotlin.random.Random
 
 class GuessViewModel : ViewModel() {
     var counter = MutableLiveData<Int>()
     var counterNum = 0
-    var result = MutableLiveData<Result>()
+    var result:Result? = null
     var secret = 0
     init {
         reset()
@@ -16,12 +18,11 @@ class GuessViewModel : ViewModel() {
     fun guess(num: Int) {
         counterNum++
         counter.value = counterNum
-        val gameResult = when (secret - num) {
+        result = when (secret - num) {
             0 -> Result.YES
             in 1..Int.MAX_VALUE -> Result.BIGGER
             else -> Result.LOWER
         }
-        result.value = gameResult
     }
 
     fun reset() {

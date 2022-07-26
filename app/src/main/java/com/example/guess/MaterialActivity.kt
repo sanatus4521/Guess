@@ -75,26 +75,23 @@ class MaterialActivity : AppCompatActivity() {
             viewModel.guess(ed_number.text.toString().toInt())
             ed_number.setText("")
         }
-        viewModel.result.observe(this, Observer { result ->
-            val message = when (result) {
-                Result.YES -> R.string.yes_you_got_it
-                Result.BIGGER -> R.string.bigger
-                else -> R.string.lower
-            }
-            AlertDialog.Builder(this)
-                .setTitle(R.string.Dialog_title)
-                .setMessage(message)
-                .setPositiveButton(R.string.ok, { dialog, which ->
-                    dialog.cancel()
-                    if (result == Result.YES) {
-                        val intent = Intent(this, RecordActivity::class.java)
-                        intent.putExtra("COUNTER", viewModel.counter.value)
-                        startActivityForResult(intent, REQUEST_RECORD)
-                    }
+        val message = when (viewModel.result) {
+            Result.YES -> R.string.yes_you_got_it
+            Result.BIGGER -> R.string.bigger
+            else -> R.string.lower
+        }
+        AlertDialog.Builder(this)
+            .setTitle(R.string.Dialog_title)
+            .setMessage(message)
+            .setPositiveButton(R.string.ok, { dialog, which ->
+                dialog.cancel()
+                if (viewModel.result == Result.YES) {
+                    val intent = Intent(this, RecordActivity::class.java)
+                    intent.putExtra("COUNTER", viewModel.counter.value)
+                    startActivityForResult(intent, REQUEST_RECORD)
                 }
-            )
-                .show()
-        })
+            })
+            .show()
     }
 
     fun test() {

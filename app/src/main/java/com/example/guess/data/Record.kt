@@ -12,5 +12,5 @@ class Record(
     @NonNull
     var counter: Int ) {
     @PrimaryKey(autoGenerate = true)
-    var id:Long = 1
+    var id:Long = 0
 }

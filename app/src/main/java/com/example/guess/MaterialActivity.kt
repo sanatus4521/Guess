@@ -2,6 +2,7 @@ package com.example.guess
 
 import android.content.DialogInterface
 import android.content.Intent
+import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -21,6 +22,7 @@ import com.example.guess.data.GameDatabase
 import com.example.guess.data.Record
 import com.example.guess.databinding.ActivityMaterialBinding
 import kotlinx.android.synthetic.main.content_material.*
+import kotlin.concurrent.thread
 
 class MaterialActivity : AppCompatActivity() {
     private val REQUEST_RECORD = 100
@@ -47,12 +49,12 @@ class MaterialActivity : AppCompatActivity() {
             replay()
         }
         // Room read
-        Thread () {
-            val recordList = GameDatabase.getInstance(this)?.recordDao()?.getAll()
-            recordList?.forEach {
-                Log.d(TAG, "record: ${it.nickname} ${it.counter}")
+        AsyncTask.execute {
+            val recordAll = GameDatabase.getDatabase(this)?.recordDao()?.getAll()
+            recordAll?.forEach {
+                Log.d(TAG, "Record: ${it.nickname} ${it.counter}")
             }
-        }.start()
+        }
     }
 
     private fun replay() {
@@ -83,6 +85,7 @@ class MaterialActivity : AppCompatActivity() {
                 .setTitle(R.string.Dialog_title)
                 .setMessage(message)
                 .setPositiveButton(R.string.ok, { dialog, which ->
+                    dialog.cancel()
                     if (result == Result.YES) {
                         val intent = Intent(this, RecordActivity::class.java)
                         intent.putExtra("COUNTER", viewModel.counter.value)

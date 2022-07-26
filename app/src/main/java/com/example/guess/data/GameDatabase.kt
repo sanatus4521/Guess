@@ -9,8 +9,8 @@ import androidx.room.RoomDatabase
 abstract class GameDatabase : RoomDatabase() {
     abstract fun recordDao() : RecordDao
     companion object {
-        private var instance: GameDatabase? = null
-        fun getInstance(context: Context) : GameDatabase? {
+        private  var instance: GameDatabase? = null
+        fun getDatabase(context: Context):GameDatabase? {
             if (instance == null) {
                 instance = Room.databaseBuilder(context,
                     GameDatabase::class.java,

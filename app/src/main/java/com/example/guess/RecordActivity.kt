@@ -24,9 +24,10 @@ class RecordActivity : AppCompatActivity() {
                 .putInt("REC_COUNT", count)
                 .putString("REC_NICKNAME", nickname)
                 .apply()
+            // Room Insert
+            val record = Record(nickname, count)
             Thread() {
-                GameDatabase.getInstance(this)?.recordDao()?.
-                add(Record(nickname, count))
+                GameDatabase.getDatabase(this)?.recordDao()?.add(record)
             }.start()
             val intent = Intent()
             intent.putExtra("NICKNAME", nickname)

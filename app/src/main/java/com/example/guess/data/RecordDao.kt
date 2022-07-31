@@ -12,5 +12,5 @@ interface RecordDao {
     fun add(record: Record)
 
     @Query("select * from Record")
-    fun  getAll() : List<Record>
+    suspend fun  getAll() : List<Record>
 }

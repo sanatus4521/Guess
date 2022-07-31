@@ -22,6 +22,9 @@ import com.example.guess.data.GameDatabase
 import com.example.guess.data.Record
 import com.example.guess.databinding.ActivityMaterialBinding
 import kotlinx.android.synthetic.main.content_material.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlin.concurrent.thread
 
 class MaterialActivity : AppCompatActivity() {
@@ -49,8 +52,8 @@ class MaterialActivity : AppCompatActivity() {
             replay()
         }
         // Room read
-        AsyncTask.execute {
-            val recordAll = GameDatabase.getDatabase(this)?.recordDao()?.getAll()
+        CoroutineScope(Dispatchers.IO).launch {
+            val recordAll = GameDatabase.getDatabase(this@MaterialActivity)?.recordDao()?.getAll()
             recordAll?.forEach {
                 Log.d(TAG, "Record: ${it.nickname} ${it.counter}")
             }

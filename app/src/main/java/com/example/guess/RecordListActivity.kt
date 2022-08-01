@@ -9,33 +9,33 @@ import com.example.guess.data.GameDatabase
 import kotlinx.android.synthetic.main.activity_record_list.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
-class RecordListActivity : AppCompatActivity() {
+class RecordListActivity : AppCompatActivity(), CoroutineScope {
+    private lateinit var job:Job
+
+    override val coroutineContext: CoroutineContext
+        get() = job + Dispatchers.Main
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_record_list)
+        job = Job()
 
-        // Recycler
-        CoroutineScope(Dispatchers.IO).launch {
+        launch {
             var records = GameDatabase.getDatabase(this@RecordListActivity)?.recordDao()?.getAll()
             records?.let {
-                runOnUiThread {
-                    recycler_record_list.layoutManager = LinearLayoutManager(this@RecordListActivity)
-                    recycler_record_list.setHasFixedSize(true)
-                    recycler_record_list.adapter = RecordAdapter(it)
-                }
+                recycler_record_list.layoutManager = LinearLayoutManager(this@RecordListActivity)
+                recycler_record_list.setHasFixedSize(true)
+                recycler_record_list.adapter = RecordAdapter(it)
             }
         }
-//        Thread() {
-//            var records = GameDatabase.getDatabase(this)?.recordDao()?.getAll()
-//            records?.let {
-//                runOnUiThread {
-//                    recycler_record_list.layoutManager = LinearLayoutManager(this)
-//                    recycler_record_list.setHasFixedSize(true)
-//                    recycler_record_list.adapter = RecordAdapter(it)
-//                }
-//            }
-//        }.start()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        job.cancel()
     }
 }

@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         "Camera",
         "Guess game",
         "Record list",
-        "Download coupons",
+        "Snooker Records",
         "News",
         "Maps"
     )
@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity() {
         when (position) {
             1 -> startActivity(Intent(this, MaterialActivity::class.java))
             2 -> startActivity(Intent(this, RecordListActivity::class.java))
+            3 -> startActivity(Intent(this, SnookerActivity::class.java))
             else -> return
         }
     }
